@@ -1,47 +1,34 @@
-import { supabaseAdmin } from '@/lib/supabase'
-import type { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://afriilink.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://afriilink2.vercel.app'
-
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: appUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${appUrl}/register`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${appUrl}/login`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
+    { url: APP_URL,             lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${APP_URL}/login`,  lastModified: new Date(), changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${APP_URL}/register`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
   ]
 
-  // Dynamic profile pages
+  // Published creator pages
   try {
-    const { data: profiles } = await supabaseAdmin
+    const supabase = await createServerSupabaseClient()
+    const { data: profiles } = await supabase
       .from('profiles')
       .select('username, updated_at')
-      .order('created_at', { ascending: false })
-      .limit(500)
+      .eq('is_published', true)
+      .order('updated_at', { ascending: false })
+      .limit(1000)
 
-    const profilePages: MetadataRoute.Sitemap = (profiles ?? []).map(p => ({
-      url: `${appUrl}/u/${p.username}`,
+    const creatorPages: MetadataRoute.Sitemap = (profiles || []).map(p => ({
+      url: `${APP_URL}/${p.username}`,
       lastModified: new Date(p.updated_at),
       changeFrequency: 'weekly' as const,
-      priority: 0.6,
+      priority: 0.8,
     }))
 
-    return [...staticPages, ...profilePages]
+    return [...staticPages, ...creatorPages]
   } catch {
     return staticPages
   }

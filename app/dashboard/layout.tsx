@@ -1,21 +1,93 @@
-import { createSupabaseServerClient } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
-import { DashboardNav } from '@/components/DashboardNav'
-import { PWAInstallPrompt } from '@/components/PWAInstallPrompt'
+'use client'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { LayoutGrid, Link2, Palette, BarChart2, Settings, ExternalLink, LogOut, Mail } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single()
+const NAV = [
+  { href: '/dashboard',            label: 'Overview',   icon: LayoutGrid },
+  { href: '/dashboard/links',      label: 'Links',      icon: Link2 },
+  { href: '/dashboard/appearance', label: 'Appearance', icon: Palette },
+  { href: '/dashboard/analytics',  label: 'Analytics',  icon: BarChart2 },
+  { href: '/dashboard/email',      label: 'Email',      icon: Mail },
+  { href: '/dashboard/settings',   label: 'Settings',   icon: Settings },
+]
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const router   = useRouter()
+  const supabase = createClient()
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data: p } = await supabase.from('profiles').select('username').eq('user_id', user.id).single()
+      if (p) setUsername(p.username)
+    }
+    load()
+  }, [])
+
+  async function signOut() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg-base)' }}>
-      <DashboardNav profile={profile} />
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        {children}
-      </main>
-      <PWAInstallPrompt />
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
+      <aside style={{
+        width: 220, flexShrink: 0, borderRight: '1px solid var(--border)',
+        display: 'flex', flexDirection: 'column', position: 'sticky', top: 0, height: '100vh',
+        padding: '24px 16px', background: 'var(--surface)',
+      }}>
+        <Link href="/" style={{ textDecoration: 'none', marginBottom: 32, display: 'block', paddingLeft: 8 }}>
+          <span style={{ fontSize: 18, fontWeight: 800 }}>
+            Afrii<span style={{ color: 'var(--accent)' }}>link</span>
+          </span>
+        </Link>
+
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+          {NAV.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href
+            return (
+              <Link key={href} href={href} style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 12px', borderRadius: 10, textDecoration: 'none',
+                fontSize: 14, fontWeight: active ? 500 : 400, transition: 'all 0.15s',
+                background: active ? 'var(--surface2)' : 'transparent',
+                color: active ? 'var(--text)' : 'var(--muted)',
+                border: active ? '1px solid var(--border)' : '1px solid transparent',
+              }}>
+                <Icon size={16} />{label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {username && (
+            <a href={`/${username}`} target="_blank" rel="noreferrer" style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 12px', borderRadius: 10, textDecoration: 'none',
+              fontSize: 14, color: 'var(--muted)',
+            }}>
+              <ExternalLink size={16} /> View page
+            </a>
+          )}
+          <button onClick={signOut} style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '10px 12px', borderRadius: 10, fontSize: 14, color: 'var(--muted)',
+            background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'inherit', width: '100%',
+          }}>
+            <LogOut size={16} /> Sign out
+          </button>
+        </div>
+      </aside>
+
+      <main style={{ flex: 1, overflow: 'auto' }}>{children}</main>
     </div>
   )
 }

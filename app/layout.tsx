@@ -1,123 +1,152 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://afriilink2.vercel.app'
-const APP_NAME = 'Afriilink'
-const APP_DESCRIPTION = 'One link. All your hustle. The premium link-in-bio platform built for African creators — share your links, socials, and products from one beautiful page.'
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://afriilink.com'
 
 export const viewport: Viewport = {
-  themeColor: '#6c63ff',
+  themeColor: '#0a0a0a',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: `${APP_NAME} — One link. All your hustle.`,
-    template: `%s | ${APP_NAME}`,
+    default: 'Afriilink — One Link for Every Creator',
+    template: '%s | Afriilink',
   },
-  description: APP_DESCRIPTION,
+  description:
+    'Afriilink gives creators one beautiful, customisable link page for all their content — socials, portfolio, shop, newsletter, and more. Free to start.',
   keywords: [
-    'link in bio', 'African creators', 'linktree alternative',
-    'creator tools', 'Nigeria creators', 'link page',
-    'social media links', 'creator economy Africa',
-    'bio link', 'all my links', 'link tree',
+    'link in bio',
+    'creator tools',
+    'link page',
+    'bio link',
+    'social media links',
+    'one link',
+    'creator platform',
+    'link tree alternative',
+    'portfolio link',
+    'digital presence',
+    'African creators',
+    'global creators',
+    'content creator',
+    'influencer tools',
   ],
   authors: [{ name: 'Afriilink', url: APP_URL }],
   creator: 'Afriilink',
-  publisher: 'The 36th Company Ltd',
-  category: 'technology',
-
-  // Favicons & icons
-  icons: {
-    icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'mask-icon', url: '/icon.svg', color: '#6c63ff' },
-    ],
-  },
-
-  manifest: '/site.webmanifest',
-
-  // Open Graph — Facebook, LinkedIn, WhatsApp, Telegram
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: APP_URL,
-    siteName: APP_NAME,
-    title: `${APP_NAME} — One link. All your hustle.`,
-    description: APP_DESCRIPTION,
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Afriilink — One link. All your hustle.',
-        type: 'image/jpeg',
-      },
-    ],
-  },
-
-  // Twitter / X
-  twitter: {
-    card: 'summary_large_image',
-    site: '@afriilink',
-    creator: '@afriilink',
-    title: `${APP_NAME} — One link. All your hustle.`,
-    description: APP_DESCRIPTION,
-    images: [
-      {
-        url: '/twitter-image.jpg',
-        width: 1200,
-        height: 600,
-        alt: 'Afriilink — One link. All your hustle.',
-      },
-    ],
-  },
-
-  // Robots
+  publisher: 'Afriilink',
   robots: {
     index: true,
     follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
-
-  // Verification (add your codes here when you have them)
-  // verification: {
-  //   google: 'your-google-site-verification-code',
-  // },
-
-  alternates: {
-    canonical: APP_URL,
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    url: APP_URL,
+    siteName: 'Afriilink',
+    title: 'Afriilink — One Link for Every Creator',
+    description:
+      'One beautiful page for all your links. Built for creators everywhere. Free to start.',
+    images: [
+      {
+        url: `${APP_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Afriilink — One Link for Every Creator',
+      },
+    ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Afriilink — One Link for Every Creator',
+    description:
+      'One beautiful page for all your links. Built for creators everywhere. Free to start.',
+    images: [`${APP_URL}/og-image.png`],
+    creator: '@afriilink',
+    site: '@afriilink',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  alternates: { canonical: APP_URL },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-        <link rel="manifest" href="/site.webmanifest" />
+        {/* Structured data — Organisation */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Afriilink',
+              url: APP_URL,
+              logo: `${APP_URL}/logo.png`,
+              sameAs: [
+                'https://twitter.com/afriilink',
+                'https://instagram.com/afriilink',
+              ],
+            }),
+          }}
+        />
+        {/* Structured data — SoftwareApplication */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'SoftwareApplication',
+              name: 'Afriilink',
+              applicationCategory: 'UtilitiesApplication',
+              operatingSystem: 'Web',
+              description:
+                'One beautiful, customisable link page for creators. Share all your content, socials, shop and more from a single URL.',
+              offers: [
+                {
+                  '@type': 'Offer',
+                  price: '0',
+                  priceCurrency: 'GBP',
+                  name: 'Free plan',
+                },
+                {
+                  '@type': 'Offer',
+                  price: '7',
+                  priceCurrency: 'GBP',
+                  name: 'Pro plan',
+                  billingIncrement: 'month',
+                },
+              ],
+            }),
+          }}
+        />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            style: {
+              background: '#1e1e1e',
+              color: '#f0f0f0',
+              border: '1px solid #2a2a2a',
+              borderRadius: '100px',
+              fontSize: '13px',
+            },
+          }}
+        />
+      </body>
     </html>
   )
 }

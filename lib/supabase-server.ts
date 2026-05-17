@@ -25,3 +25,6 @@ export async function createServerSupabaseClient() {
     }
   )
 }
+
+// Alias for files importing { createSupabaseServerClient }
+export const createSupabaseServerClient = createServerSupabaseClient

@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Link as LinkType, LINK_ICONS, LINK_LABELS, LinkType as LType } from '@/types'
@@ -280,7 +281,7 @@ export default function LinksPage() {
             <span style={{ fontSize: 12, color: 'var(--muted)' }}>{links.length}/5 links used</span>
           </div>
           {links.length >= 5 && (
-            <a href="/dashboard/settings" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/dashboard/settings" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>
               Upgrade for unlimited →
             </a>
           )}

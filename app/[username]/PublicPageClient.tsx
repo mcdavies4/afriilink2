@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Profile, Link as LinkType, THEMES } from '@/types'
 import { ExternalLink } from 'lucide-react'
 
@@ -219,7 +220,7 @@ export default function PublicPageClient({ profile, links }: Props) {
 
         {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: 32, opacity: 0.3, fontSize: 12 }}>
-          <a href="/" style={{ textDecoration: 'none', color: theme.text }}>
+          <Link href="/" style={{ textDecoration: 'none', color: theme.text }}>
             Made with Afriilink ✦
           </a>
         </div>

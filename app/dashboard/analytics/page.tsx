@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Link as LinkType } from '@/types'
@@ -210,9 +211,9 @@ export default function AnalyticsPage() {
               <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>
                 See which countries and platforms your visitors come from. Pro feature.
               </p>
-              <a href="/dashboard/settings" style={{
+              <Link href="/dashboard/settings" style={{
                 fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600
-              }}>Upgrade to Pro →</a>
+              }}>Upgrade to Pro →</Link>
             </div>
           )}
         </div>

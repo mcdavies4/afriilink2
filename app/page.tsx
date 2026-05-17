@@ -429,9 +429,9 @@ export default function LandingPage() {
           Afrii<span style={{ color: 'var(--accent)' }}>link</span>
         </span>
         <div style={{ display: 'flex', gap: 24, fontSize: 13, color: 'var(--muted)' }}>
-          <a href="/privacy" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Privacy</a>
-          <a href="/terms"   style={{ color: 'var(--muted)', textDecoration: 'none' }}>Terms</a>
-          <a href="/blog"    style={{ color: 'var(--muted)', textDecoration: 'none' }}>Blog</a>
+          <Link href="/privacy" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Privacy</Link>
+          <Link href="/terms"   style={{ color: 'var(--muted)', textDecoration: 'none' }}>Terms</Link>
+          <Link href="/blog"    style={{ color: 'var(--muted)', textDecoration: 'none' }}>Blog</Link>
           <a href="mailto:hello@afriilink.com" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Contact</a>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>
